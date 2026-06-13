@@ -1,7 +1,13 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
+import { PrismaAdapter } from "@auth/prisma-adapter";
+import { prisma } from "@/lib/prisma";
 
 export const authOptions: NextAuthOptions = {
+  adapter: PrismaAdapter(prisma) as any,
+  session: {
+    strategy: "jwt"
+  },
   providers: [
     GithubProvider({
       clientId: process.env.GITHUB_ID!,
@@ -19,6 +25,10 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       // @ts-ignore
       session.accessToken = token.accessToken;
+      if (session.user && token.sub) {
+        // token.sub contains the user id when using jwt strategy
+        (session.user as any).id = token.sub;
+      }
       return session;
     }
   }

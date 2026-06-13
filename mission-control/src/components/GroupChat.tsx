@@ -1,53 +1,17 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import { useSession } from 'next-auth/react';
+import { supabase } from '@/lib/supabaseClient';
+import { getMessages, sendMessage } from '@/app/actions';
 import styles from './GroupChat.module.css';
 
-const initialMessages = [
-  {
-    id: 1,
-    sender: 'Arjun',
-    role: 'operator',
-    text: 'Starting work on the auth system',
-    time: '10:02 AM',
-  },
-  {
-    id: 2,
-    sender: 'Pony',
-    role: 'operator',
-    text: 'did anyone set up rate limiting for the API?',
-    time: '10:03 AM',
-  },
-  {
-    id: 3,
-    sender: 'Mesh Memory',
-    role: 'memory',
-    text: 'Yes — Unnath added this 2 days ago.',
-    time: '10:03 AM',
-    memoryData: {
-      key: 'api/rate_limiting',
-      value: 'express-rate-limit, 100 req/min per IP',
-      addedBy: 'Unnath via Copilot • Jun 10 14:22',
-      votes: 'Y: 3 N: 0'
-    }
-  },
-  {
-    id: 4,
-    sender: "Pony's Agent (Claude Code)",
-    role: 'agent',
-    time: '10:04 AM',
-    decisionData: {
-      decision: 'Use JWT over sessions',
-      reason: 'Stateless, better for mobile clients',
-      affects: '/src/auth/* (4 files)'
-    }
-  }
-];
-
 export default function GroupChat() {
+  const { data: session } = useSession();
   const [activeTab, setActiveTab] = useState('chat');
-  const [messages, setMessages] = useState(initialMessages);
+  const [messages, setMessages] = useState<any[]>([]);
   const [input, setInput] = useState('');
+  const [activeWorkspace, setActiveWorkspace] = useState('general');
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -55,23 +19,76 @@ export default function GroupChat() {
   };
 
   useEffect(() => {
+    // Poll local storage for active workspace
+    const checkWorkspace = setInterval(() => {
+      const saved = localStorage.getItem('mesh_workspaces');
+      if (saved) {
+        const wsList = JSON.parse(saved);
+        const active = wsList.find((ws: any) => ws.active);
+        if (active && active.id !== activeWorkspace) {
+          setActiveWorkspace(active.id);
+        }
+      }
+    }, 1000);
+    return () => clearInterval(checkWorkspace);
+  }, [activeWorkspace]);
+
+  useEffect(() => {
+    // Fetch initial messages
+    getMessages(activeWorkspace).then(data => {
+      setMessages(data);
+      scrollToBottom();
+    });
+
+    // Subscribe to real-time inserts via Supabase
+    const channel = supabase
+      .channel('realtime_chat')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'Message', filter: `workspaceId=eq.${activeWorkspace}` }, (payload) => {
+        // We fetch the full message payload to get the user name (since the insert only has userId)
+        // For ultimate speed, we just re-fetch the message list
+        getMessages(activeWorkspace).then(data => {
+          setMessages(data);
+          scrollToBottom();
+        });
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [activeWorkspace]);
+
+  useEffect(() => {
     scrollToBottom();
   }, [messages, activeTab]);
 
-  const handleSend = (e: React.FormEvent) => {
+  const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!input.trim()) return;
+    if (!input.trim() || !session) return;
 
+    const tempId = Date.now().toString();
     const userMessage = {
-      id: Date.now(),
-      sender: 'You',
+      id: tempId,
+      sender: session.user?.name || 'You',
       role: 'operator',
       text: input,
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     };
 
+    // Optimistic UI update
     setMessages(prev => [...prev, userMessage]);
+    const textToSend = input;
     setInput('');
+    scrollToBottom();
+
+    try {
+      await sendMessage(activeWorkspace, textToSend);
+      // Supabase realtime will broadcast the official message
+    } catch (err) {
+      console.error(err);
+      // Remove temp message if failed
+      setMessages(prev => prev.filter(m => m.id !== tempId));
+    }
   };
 
   return (
