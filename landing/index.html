@@ -235,10 +235,21 @@
     <section class="pseudo-commands shell section" id="get-started">
       <div class="section-heading" style="margin-bottom: 50px;">
         <div class="section-index">05 / How to get started</div>
-        <h2>Pseudo-commands<br>in any agent chat.</h2>
+        <h2>Published on npm.<br>One command to install.</h2>
       </div>
+      <p class="protocol-intro" style="margin-left: 0; margin-top: 0; margin-bottom: 50px;">/.relay ships as <code>relay-os</code> on the public npm registry. Install it globally and run <code>relay init</code> inside any repo to wire up hooks, skills, <code>.relay/</code>, and Mission Control.</p>
+
+      <div class="file-tree" aria-label="Install /.relay from npm" style="margin-bottom: 50px;">
+        <div class="terminal-bar"><span></span><span>npm</span></div>
+        <pre><span>$ npm install -g relay-os</span>
+<span>$ relay init</span>       <i># sets up .relay/, agent hooks + skills, launches Mission Control</i>
+<span>$ relay sync</span>       <i># harvest agent transcripts into shared memory</i>
+<span>$ relay context .</span>  <i># regenerate the handoff file for the next agent</i></pre>
+        <div class="terminal-command"><span>$</span> <a href="https://www.npmjs.com/package/relay-os" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">npmjs.com/package/relay-os ↗</a><strong>v0.1.0</strong></div>
+      </div>
+
       <p class="protocol-intro" style="margin-left: 0; margin-top: 0; margin-bottom: 50px;">Not built-in slash commands — agents recognize these from patched instructions:</p>
-      
+
       <div class="commands-table-wrapper">
         <table class="commands-table">
           <thead>

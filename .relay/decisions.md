@@ -7,6 +7,7 @@
 
 ## Resolved
 
+- 2026-06-15 — `relay-os@0.1.0` published successfully to the public npm registry; landing page get-started section (`landing/index.html`) now documents `npm install -g relay-os` + `relay init/sync/context` and links to npmjs.com/package/relay-os
 - 2026-06-14 — Agent-facing instructions (CLAUDE.md, AGENTS.md, .cursorrules, copilot-instructions.md, relay.mdc, skills, hook libs, README/QUICKSTART) now tell agents to use the local `relay` npm binary (`relay init`, `relay sync`, `relay context .`) instead of `npx relay-os`; `npx relay` kept only as fallback if `relay` isn't on PATH
 - 2026-06-15 — Keep npm package name as `relay-os` (considered renaming to `relay-brain`, available but decided against — no rename)
 - 2026-06-15 — Install/distribution: publish `relay-os` to the public npm registry (chosen over GitHub-install-only); `npx github:AspiringPianist/OrbitOS` remains a working fallback

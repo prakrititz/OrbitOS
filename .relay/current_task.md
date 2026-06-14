@@ -9,9 +9,8 @@
 - [x] Add missing `LICENSE` (MIT) and include it in `package.json` `files`
 - [ ] Decide weekend hero feature: full Conductor loop vs collision detection first
 - [x] User ran `npm login` (account: jester1177)
-- [ ] npm publish `relay-os@0.1.0` — still 404 on registry after 2nd attempt; likely still blocked on 2FA/access-token (403). Waiting on user to confirm 2FA/token status and share final lines of publish output
-- [ ] Run `npm pkg fix` to normalize `bin.relay` path (remove leading `./`) and `repository.url` (`git+` prefix) before next publish
-- [ ] Re-verify `backend/node_modules` exclusion from tarball before next publish attempt
+- [x] npm publish `relay-os@0.1.0` — package is live on the public npm registry
+- [x] Add npm install instructions (`npm install -g relay-os`, `relay init/sync/context`) + link to npmjs.com/package/relay-os to `landing/index.html` get-started section
 
 ## Next
 - [ ] Build Conductor vertical slice (reuses existing spawn + callLlm + timeline):
