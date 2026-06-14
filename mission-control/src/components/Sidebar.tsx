@@ -1,111 +1,136 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
+import { AGENTS } from '@/lib/relay';
+import { useRelay, AgentStatus } from '@/lib/RelayContext';
 import styles from './Sidebar.module.css';
 
-const teammates = [
-  { id: '1', name: 'Prakrititz Borah', tool: 'Claude Code', initials: 'PB', color: '#ff5c5c', status: 'CODING', file: '/src/auth/jwt.ts', message: 'working on token refresh', dot: 'green' },
-  { id: '2', name: 'Unnath Chittimalla', tool: 'Copilot', initials: 'UC', color: '#5cff8a', status: 'REVIEWING', file: '/api/routes/users.ts', message: '', dot: 'green' },
-  { id: '3', name: 'Krishna Sai', tool: 'Codex', initials: 'KS', color: '#5c9eff', status: 'IDLE', file: 'last seen 4m ago', message: '', dot: 'yellow' },
-  { id: '4', name: 'Gathik Jindal', tool: 'Cursor', initials: 'GJ', color: '#e05cff', status: 'OFFLINE', file: '', message: '', dot: 'grey' },
-  { id: '5', name: 'Hemanth Mada', tool: 'Antigravity', initials: 'HM', color: '#ffb85c', status: 'OFFLINE', file: '', message: '', dot: 'grey' },
-];
+const STATUS_LABEL: Record<AgentStatus, string> = {
+  idle: 'Connect',
+  handshaking: 'Connecting…',
+  connected: 'Connected',
+  error: 'Retry',
+};
 
-const proposals = [
-  { id: 'p1', type: 'proposed', icon: '?', text: "Pony's agent proposed #48 JWT auth approach", time: '2m ago' },
-  { id: 'p2', type: 'committed', icon: '+', text: "#46 committed to memory Postgres migration", time: '1h ago' },
-  { id: 'p3', type: 'rejected', icon: '-', text: "#44 rejected (2-1 vote) Use MongoDB", time: '3h ago' },
-  { id: 'p4', type: 'comment', icon: '@', text: 'Unnath commented on #47 "we should test first"', time: '4h ago' },
-];
+const STATUS_COLOR: Record<AgentStatus, string> = {
+  idle: 'var(--text-muted)',
+  handshaking: 'var(--color-warning)',
+  connected: 'var(--color-success)',
+  error: '#ff9a9a',
+};
+
+function relativeTime(ts?: string): string {
+  if (!ts) return '';
+  const diff = Date.now() - new Date(ts).getTime();
+  if (Number.isNaN(diff)) return '';
+  const s = Math.floor(diff / 1000);
+  if (s < 60) return `${s}s ago`;
+  const m = Math.floor(s / 60);
+  if (m < 60) return `${m}m ago`;
+  const h = Math.floor(m / 60);
+  if (h < 24) return `${h}h ago`;
+  return `${Math.floor(h / 24)}d ago`;
+}
 
 export default function Sidebar() {
-  const [initCode, setInitCode] = useState<{agent: string, code: string} | null>(null);
+  const { activeWorkspace, agentStates, connect, memory } = useRelay();
+  const stateById = Object.fromEntries(agentStates.map((s) => [s.id, s]));
 
-  const handleInit = (agent: string) => {
-    const code = `RELAY_INIT_HANDSHAKE_${agent.toUpperCase()}_${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
-    setInitCode({ agent, code });
-    navigator.clipboard.writeText(code);
-    
-    // Auto-hide the hint after 5 seconds
-    setTimeout(() => setInitCode(null), 5000);
+  const handleConnect = async (id: (typeof AGENTS)[number]['id']) => {
+    try {
+      await connect(id);
+    } catch {
+      /* error surfaced via agentStates */
+    }
   };
+
+  const recent = (memory?.timeline || []).slice(-8).reverse();
 
   return (
     <aside className={styles.sidebar}>
       <div className={styles.sectionTitle}>AGENT INTEGRATIONS</div>
+
+      {!activeWorkspace && (
+        <div style={{ padding: '0 16px 12px', fontSize: 11, color: 'var(--text-muted)', lineHeight: 1.5 }}>
+          Select or add a workspace to connect your agents.
+        </div>
+      )}
+
       <div className={styles.integrationsList}>
-        <button className={styles.initBtn} onClick={() => handleInit('Antigravity')}>
-          <img src="/logos/antigravity.png" alt="Antigravity" className={styles.btnLogo} />
-          Connect Antigravity
-        </button>
-        <button className={styles.initBtn} onClick={() => handleInit('Codex')}>
-          <img src="/logos/Codex.png" alt="Codex" className={styles.btnLogo} />
-          Connect Codex
-        </button>
-        <button className={styles.initBtn} onClick={() => handleInit('Claude Code')}>
-          <img src="/logos/Claude.png" alt="Claude Code" className={styles.btnLogo} />
-          Connect Claude Code
-        </button>
-        <button className={styles.initBtn} onClick={() => handleInit('Cursor')}>
-          <img src="/logos/cursor.png" alt="Cursor" className={styles.btnLogo} />
-          Connect Cursor
-        </button>
-        <button className={styles.initBtn} onClick={() => handleInit('Copilot')}>
-          <img src="/logos/github-copilot.png" alt="Copilot" className={styles.btnLogo} />
-          Connect Copilot
-        </button>
-        {initCode && (
-          <div className={styles.initHint}>
-            Copied: <code>{initCode.code}</code><br/>
-            Paste this into {initCode.agent} to link the transcript!
+        {AGENTS.map((agent) => {
+          const st = stateById[agent.id];
+          const status = (st?.status || 'idle') as AgentStatus;
+          const connected = status === 'connected';
+          const disabled = !activeWorkspace || status === 'handshaking';
+          return (
+            <div key={agent.id} style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+              <button
+                className={styles.initBtn}
+                disabled={disabled}
+                onClick={() => handleConnect(agent.id)}
+                style={{
+                  opacity: disabled && !connected ? 0.55 : 1,
+                  borderColor: connected ? 'var(--color-success)' : undefined,
+                  background: connected ? 'rgba(34, 208, 122, 0.08)' : undefined,
+                }}
+              >
+                <img
+                  src={agent.logo}
+                  alt={agent.label}
+                  className={styles.btnLogo}
+                  style={{ filter: connected ? 'none' : undefined }}
+                />
+                <span style={{ flex: 1 }}>{agent.label}</span>
+                <span style={{ fontSize: 10, fontWeight: 700, color: STATUS_COLOR[status] }}>
+                  {STATUS_LABEL[status]}
+                </span>
+              </button>
+              {status === 'connected' && (st?.eventCount ?? 0) > 0 && (
+                <div style={{ paddingLeft: 4, fontSize: 10, color: 'var(--text-muted)' }}>
+                  ✓ {st.eventCount} events loaded
+                </div>
+              )}
+              {status === 'error' && st?.error && (
+                <div style={{ paddingLeft: 4, fontSize: 10, color: '#ff9a9a', lineHeight: 1.4 }}>
+                  {st.error}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      <div className={styles.spacerSmall} />
+
+      <div className={styles.sectionTitle}>RECENT AGENT ACTIVITY</div>
+      <div className={`${styles.proposalsList} custom-scrollbar`} style={{ overflowY: 'auto' }}>
+        {recent.length === 0 ? (
+          <div style={{ padding: '0 16px', fontSize: 11, color: 'var(--text-muted)' }}>
+            {activeWorkspace ? 'No agent events yet. Connect an agent to populate this.' : '—'}
           </div>
+        ) : (
+          recent.map((e, i) => {
+            const icon = e.kind === 'code_edit' ? '✎' : e.kind === 'artifact' ? '◆' : '•';
+            const text =
+              e.kind === 'code_edit'
+                ? e.file || e.summary || 'Edited a file'
+                : (e.content || e.summary || '').slice(0, 90);
+            return (
+              <div key={`${e.ts}-${i}`} className={styles.proposalItem}>
+                <div className={styles.proposalIcon}>{icon}</div>
+                <div className={styles.proposalContent}>
+                  <div className={styles.proposalText}>
+                    <strong>{e.source}</strong> {text}
+                  </div>
+                  <div className={styles.proposalTime}>{relativeTime(e.ts)}</div>
+                </div>
+              </div>
+            );
+          })
         )}
       </div>
 
-
-
-      <div className={styles.spacerSmall}></div>
-
-      <div className={styles.sectionTitle}>TEAMMATES</div>
-      
-      <div className={styles.teammatesList}>
-        {teammates.map(tm => (
-          <div key={tm.id} className={styles.teammateCard}>
-            <div className={styles.tmHeader}>
-              <div className={styles.profileIcon} style={{backgroundColor: tm.color}}>{tm.initials}</div>
-              <span className={`${styles.statusDot} ${styles[tm.dot]}`}></span>
-              <span className={styles.tmName}>{tm.name}</span>
-            </div>
-            {tm.tool !== 'OFFLINE' && (
-              <div className={styles.tmDetails}>
-                <div className={styles.tmTool}>{tm.tool} • {tm.status}</div>
-                <div className={styles.tmFile}>{tm.file}</div>
-                {tm.message && <div className={styles.tmMsg}>"{tm.message}"</div>}
-              </div>
-            )}
-            {tm.tool === 'OFFLINE' && (
-              <div className={styles.tmDetails}>
-                <div className={styles.tmTool}>OFFLINE</div>
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
-
-      <div className={styles.spacer}></div>
-
-      <div className={styles.sectionTitle}>RECENT MEMORY ACTIVITY</div>
-      <div className={styles.proposalsList}>
-        {proposals.map(p => (
-          <div key={p.id} className={styles.proposalItem}>
-            <div className={styles.proposalIcon}>{p.icon}</div>
-            <div className={styles.proposalContent}>
-              <div className={styles.proposalText}>{p.text}</div>
-              <div className={styles.proposalTime}>{p.time}</div>
-            </div>
-          </div>
-        ))}
-      </div>
+      <div className={styles.spacer} />
     </aside>
   );
 }

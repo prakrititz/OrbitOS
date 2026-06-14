@@ -7,7 +7,7 @@ import TaskQueue from '@/components/TaskQueue';
 
 import WorkspaceRail from '@/components/WorkspaceRail';
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import styles from './page.module.css';
 

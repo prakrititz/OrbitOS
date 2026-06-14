@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import AuthProvider from "@/components/SessionProvider";
+import { RelayProvider } from "@/lib/RelayContext";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: '--font-inter' });
@@ -20,7 +21,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.variable} ${jetbrainsMono.variable}`}>
         <AuthProvider>
-          {children}
+          <RelayProvider>
+            {children}
+          </RelayProvider>
         </AuthProvider>
       </body>
     </html>
