@@ -17,9 +17,8 @@ export default function GlobalHeader() {
     <header className={styles.header}>
       <div className={styles.left}>
         <div className={styles.logo}>
-          /.
-          <img src="/logos/logo.png" alt="r" style={{ height: 16, objectFit: 'contain', margin: '0 2px' }} />
-          elay
+          <img src="/logos/logo.png" alt="" style={{ height: 36, objectFit: 'contain' }} />
+          /.relay
         </div>
 
         <div style={{ position: 'relative' }}>
