@@ -61,6 +61,55 @@ function buildAgentSummary(memory) {
   }));
 }
 
+function isEditEvent(event) {
+  return event.kind === 'code_edit' || event.kind === 'artifact';
+}
+
+/** All code edits/artifacts, newest first (for dedicated edits views). */
+function buildCodeEdits(sorted) {
+  return sorted
+    .filter(isEditEvent)
+    .slice()
+    .sort((a, b) => Date.parse(b.ts || '') - Date.parse(a.ts || ''));
+}
+
+/**
+ * Balanced preview: ensure each agent source appears before filling with global newest.
+ * Avoids "last N globally" lists that are all one agent when it was active most recently.
+ */
+function buildRecentEdits(sorted, { limit = 50, perAgentMin = 5 } = {}) {
+  const edits = sorted.filter(isEditEvent);
+  if (!edits.length) return [];
+
+  const bySource = new Map();
+  for (const e of edits) {
+    const src = e.source || 'Unknown';
+    if (!bySource.has(src)) bySource.set(src, []);
+    bySource.get(src).push(e);
+  }
+
+  const picked = new Set();
+  const result = [];
+
+  for (const [, agentEdits] of bySource) {
+    for (const e of agentEdits.slice(-perAgentMin)) {
+      if (picked.has(e)) continue;
+      picked.add(e);
+      result.push(e);
+    }
+  }
+
+  for (const e of [...edits].reverse()) {
+    if (result.length >= limit) break;
+    if (picked.has(e)) continue;
+    picked.add(e);
+    result.push(e);
+  }
+
+  result.sort((a, b) => Date.parse(b.ts || '') - Date.parse(a.ts || ''));
+  return result.slice(0, limit);
+}
+
 function buildDashboard(workspacePath, options = {}) {
   const memory = getMemory(workspacePath);
   const timeline = Array.isArray(memory.timeline) ? memory.timeline : [];
@@ -69,10 +118,8 @@ function buildDashboard(workspacePath, options = {}) {
   const ir = readIrFiles(workspacePath);
   const tree = buildRelayTree(workspacePath);
 
-  const recentEdits = sorted
-    .filter((e) => e.kind === 'code_edit' || e.kind === 'artifact')
-    .slice(-20)
-    .reverse();
+  const codeEdits = buildCodeEdits(sorted);
+  const recentEdits = buildRecentEdits(sorted);
 
   const activityPage = paginateEvents(sorted, {
     limit: options.limit || 40,
@@ -104,6 +151,7 @@ function buildDashboard(workspacePath, options = {}) {
       architecture: ir['architecture.md'] || '',
       compileBrief: ir['compile_brief.md'] || '',
     },
+    codeEdits,
     recentEdits,
     activity: activityPage,
     days: groupEventsByDay(sorted).slice(0, 14),
@@ -113,6 +161,8 @@ function buildDashboard(workspacePath, options = {}) {
 
 module.exports = {
   buildDashboard,
+  buildCodeEdits,
+  buildRecentEdits,
   paginateEvents,
   groupEventsByDay,
 };

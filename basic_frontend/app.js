@@ -444,11 +444,14 @@ function editCardHtml(e, expandable = true) {
 
 function renderEdits() {
   const grid = $('editsGrid');
-  if (!dashboard || !dashboard.recentEdits.length) {
+  const edits = dashboard?.codeEdits?.length
+    ? dashboard.codeEdits
+    : dashboard?.recentEdits || [];
+  if (!dashboard || !edits.length) {
     grid.innerHTML = emptyHtml('No edits', 'Code edits from all agents appear here.');
     return;
   }
-  grid.innerHTML = dashboard.recentEdits.map((e) => editCardHtml(e, true)).join('');
+  grid.innerHTML = edits.map((e) => editCardHtml(e, true)).join('');
 }
 
 function renderActivityFilters() {

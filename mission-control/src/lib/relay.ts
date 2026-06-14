@@ -115,6 +115,7 @@ export interface RelayDashboard {
   agents: { name: string; status: string; eventCount: number; transcriptPath?: string | null }[];
   handoff: { markdown: string; updatedAt?: string | null };
   ir: RelayDashboardIr;
+  codeEdits: RelayEvent[];
   recentEdits: RelayEvent[];
   activity: { total: number; offset: number; limit: number; events: RelayEvent[] };
 }
@@ -277,4 +278,11 @@ export function filterTimeline(events: RelayEvent[]): RelayEvent[] {
     }
     return true;
   });
+}
+
+export function getCodeEdits(events: RelayEvent[]): RelayEvent[] {
+  return filterTimeline(events)
+    .filter((e) => e.kind === 'code_edit' || e.kind === 'artifact')
+    .slice()
+    .sort((a, b) => Date.parse(b.ts || '') - Date.parse(a.ts || ''));
 }

@@ -1,10 +1,6 @@
 {
   "workspace": "C:\\Users\\unnat\\Documents\\GitHub\\OrbitOS",
-<<<<<<< HEAD
   "lastSync": "2026-06-14T16:41:47.468Z",
-=======
-  "lastSync": "2026-06-14T16:05:09.377Z",
->>>>>>> ddce88a63834a029e49e620bfc15f591eb08d02a
   "agents": {
     "Cursor": {
       "status": "connected",

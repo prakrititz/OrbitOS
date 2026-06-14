@@ -2,7 +2,7 @@
 
 import React, { useMemo, useState } from 'react';
 import { useRelay } from '@/lib/RelayContext';
-import { AGENT_BY_ID, filterTimeline } from '@/lib/relay';
+import { AGENT_BY_ID, getCodeEdits } from '@/lib/relay';
 import ActivityTimeline from './ActivityTimeline';
 import AgentSessionChat from './AgentSessionChat';
 import styles from './ProjectDashboard.module.css';
@@ -18,7 +18,7 @@ const IR_TABS = [
 
 type IrKey = (typeof IR_TABS)[number]['key'];
 
-function EditCard({ e }: { e: ReturnType<typeof filterTimeline>[0] }) {
+function EditCard({ e }: { e: ReturnType<typeof getCodeEdits>[0] }) {
   const meta = AGENT_BY_ID[e.source as keyof typeof AGENT_BY_ID];
   return (
     <details className={styles.editCard}>
@@ -44,13 +44,10 @@ export default function ProjectDashboard() {
   const [irTab, setIrTab] = useState<IrKey>('project');
 
   const timeline = memory?.timeline || [];
-  const edits = useMemo(
-    () =>
-      filterTimeline(dashboard?.recentEdits?.length ? dashboard.recentEdits : timeline).filter(
-        (e) => e.kind === 'code_edit' || e.kind === 'artifact',
-      ),
-    [dashboard, timeline],
-  );
+  const edits = useMemo(() => {
+    if (dashboard?.codeEdits?.length) return dashboard.codeEdits;
+    return getCodeEdits(timeline);
+  }, [dashboard, timeline]);
 
   const irContent = dashboard?.ir?.[irTab] || '';
   const handoff = dashboard?.handoff?.markdown || '';
