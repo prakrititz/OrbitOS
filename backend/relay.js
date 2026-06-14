@@ -14,8 +14,15 @@ const AGENT_ROOTS = {
   Antigravity: path.join(HOME, '.gemini', 'antigravity-ide', 'brain'),
   Codex: path.join(HOME, '.codex', 'sessions'),
   'Claude Code': path.join(HOME, '.claude', 'projects'),
-  'GitHub Copilot': path.join(HOME, '.copilot', 'session-state'),
 };
+
+const COPILOT_DISCOVERY_ROOTS = [
+  path.join(HOME, '.copilot', 'session-state'),
+  path.join(HOME, 'AppData', 'Roaming', 'Code', 'User', 'workspaceStorage'),
+  path.join(HOME, 'AppData', 'Roaming', 'Code', 'User', 'globalStorage', 'github.copilot-chat'),
+  path.join(HOME, '.config', 'Code', 'User', 'workspaceStorage'),
+  path.join(HOME, '.config', 'Code', 'User', 'globalStorage', 'github.copilot-chat'),
+];
 
 // ─── RELAY DIRECTORY HELPERS ──────────────────────────────────────────────────
 function getRelayDir(workspacePath) {
@@ -195,6 +202,23 @@ function findJsonlFiles(dir, results = []) {
   return results;
 }
 
+function findJsonlFilesInRoots(roots) {
+  const seen = new Set();
+  const results = [];
+
+  for (const root of roots) {
+    const files = findJsonlFiles(root);
+    for (const file of files) {
+      const normalized = path.resolve(file);
+      if (seen.has(normalized)) continue;
+      seen.add(normalized);
+      results.push(normalized);
+    }
+  }
+
+  return results;
+}
+
 function mostRecentFile(files) {
   if (!files.length) return null;
   return [...files].sort((a, b) => {
@@ -253,13 +277,12 @@ function discoverCodexByWorkspaceCwd(workspacePath) {
 
 // Strategy 4 (GitHub Copilot): match session.start context cwd to registered workspace
 function discoverCopilotByWorkspaceCwd(workspacePath) {
-  const root = AGENT_ROOTS['GitHub Copilot'];
-  if (!fs.existsSync(root)) return null;
-
   const normalize = (p) => String(p || '').toLowerCase().replace(/\\/g, '/').replace(/\/$/, '');
   const targetCwd = normalize(workspacePath);
 
-  const files = findJsonlFiles(root);
+  const files = findJsonlFilesInRoots(COPILOT_DISCOVERY_ROOTS);
+  if (!files.length) return null;
+
   const matched = [];
 
   for (const file of files) {
@@ -281,7 +304,7 @@ function discoverCopilotByWorkspaceCwd(workspacePath) {
     return best;
   }
 
-  console.warn('[GitHub Copilot] No cwd match found. Falling back to most recent session file.');
+  console.warn('[GitHub Copilot] No cwd match found. Falling back to most recent Copilot session file.');
   return mostRecentFile(files);
 }
 

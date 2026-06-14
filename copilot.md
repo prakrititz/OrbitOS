@@ -1,14 +1,18 @@
 # GitHub Copilot Extraction Analysis
 
-Following the relay integration work, GitHub Copilot is now handled like the other agents by reading its local session-state files directly.
+Following the relay integration work, GitHub Copilot is now handled like the other agents by reading its local session files directly.
 
 ## 1. Storage Location
 
-Copilot sessions live under:
+Copilot sessions can live under several local paths:
 
 - `C:\Users\[Username]\.copilot\session-state\[sessionId]\events.jsonl`
+- `C:\Users\[Username]\AppData\Roaming\Code\User\workspaceStorage\[hash]\...`
+- `C:\Users\[Username]\AppData\Roaming\Code\User\globalStorage\github.copilot-chat\...`
+- `C:\Users\[Username]\.config\Code\User\workspaceStorage\[hash]\...`
+- `C:\Users\[Username]\.config\Code\User\globalStorage\github.copilot-chat\...`
 
-The relay matches sessions to the current workspace using the `session.start` metadata in the first line of each file.
+The relay scans all supported Copilot roots and matches sessions to the current workspace using the `session.start` metadata in the first line of each JSONL file.
 
 ## 2. File Format
 
@@ -21,14 +25,14 @@ The parser normalizes the message content into unified relay events with `role`,
 
 ## 3. Extraction Method
 
-The backend now uses a simple file-based workflow:
+The backend now uses a broader file-based workflow:
 
-1. Enumerate `~/.copilot/session-state/**/events.jsonl`
+1. Enumerate all known Copilot roots for `**/events.jsonl`
 2. Read the first line of each file
 3. Match `session.start.data.context.cwd` or `workspaceFolder.folderPath` to the registered workspace
 4. Parse the full JSONL file into relay memory
 
-This is much simpler than the older VS Code database approach because the session files are already plain JSONL.
+This stays simpler than the older VS Code database approach because the session files are still plain JSONL where available, but it is now more flexible about where they are found.
 
 ## 4. Other Discoverable Artifacts
 
