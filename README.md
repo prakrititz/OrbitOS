@@ -14,7 +14,7 @@
 
 ## The Human Problem: Why Relay Exists
 
-AI coding agents are getting incredibly smart, but the way we interact with them is broken. Every IDE, chatbot, and agent has invented its own custom language and siloed instructions:
+AI coding agents are getting incredibly smart, but the way we interact with them is not smart, and is broken. Every IDE, chatbot, and agent has invented its own custom language and siloed instructions:
 
 * **Claude** reads `CLAUDE.md`
 * **Cursor** reads `.cursorrules` or `.cursor/rules/`
