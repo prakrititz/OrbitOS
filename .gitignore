@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+.next/
+dist/
+build/
+coverage/
+out/
+
+# Runtime / local state
+.relay/
+.env
+.env.*
+*.log
+*.tsbuildinfo
+
+# OS / editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Scratch files
+temp.*
+*.tmp
