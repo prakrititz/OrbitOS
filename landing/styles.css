@@ -61,6 +61,15 @@ a {
   opacity: 0.35;
 }
 
+.inline-logo {
+  height: 1.8em;
+  object-fit: contain;
+  margin-right: 8px;
+  vertical-align: middle;
+  display: inline-block;
+  transform: translateY(-2px);
+}
+
 .nav-links {
   display: flex;
   gap: 36px;
@@ -715,6 +724,44 @@ a {
 .terminal-command strong {
   color: rgba(255, 255, 255, 0.35);
   font-weight: 400;
+}
+
+.commands-table-wrapper {
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.commands-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.commands-table th,
+.commands-table td {
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--line);
+  font: 400 13px/1.5 var(--body);
+  color: var(--muted);
+}
+
+.commands-table th {
+  font: 500 14px/1 var(--display);
+  color: #fff;
+}
+
+.commands-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.commands-table code {
+  color: rgba(255, 255, 255, 0.86);
+  background: rgba(255, 255, 255, 0.05);
+  padding: 6px 10px;
+  border-radius: 4px;
+  font: 400 12px/1 var(--mono);
 }
 
 .traction {

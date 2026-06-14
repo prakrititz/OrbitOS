@@ -14,10 +14,10 @@
 <body>
   <header class="site-header">
     <nav class="nav shell" aria-label="Primary navigation">
-      <a class="wordmark" href="#top" aria-label="/.relay home">/.relay</a>
+      <a class="wordmark" href="#top" aria-label="/.relay home"><img src="logo.png" alt="" class="inline-logo" /> /.relay</a>
       <div class="nav-links">
         <a href="#how-it-works">How it works</a>
-        <a href="#access">Get early access <span aria-hidden="true">↗</span></a>
+        <a href="#access">Try now for free <span aria-hidden="true">↗</span></a>
       </div>
     </nav>
   </header>
@@ -29,8 +29,7 @@
         <h1>Your AI knows what you know.<br><span>Now it knows what your team knows.</span></h1>
         <p class="hero-subtitle">Claude Code, Cursor, Copilot, Codex, Antigravity. Bring whatever you use. /.relay makes every AI on your team share one brain.</p>
         <div class="hero-actions">
-          <a class="button" href="#access">Get early access <span aria-hidden="true">↗</span></a>
-          <span>No subscription. Bring your own credits.</span>
+          <a class="button" href="#access">Try now for free <span aria-hidden="true">↗</span></a>
         </div>
       </div>
 
@@ -73,8 +72,8 @@
         <div class="brain-shell">
           <div class="brainContainer"></div>
           <div class="brain-core">
-            <span>/.relay</span>
-            <small>Shared memory</small>
+            <img src="logo.png" alt="" style="height: 48px; object-fit: contain; margin-bottom: 4px;" />
+            <span style="font-size: 11px; color: rgba(255, 255, 255, 0.8);">/.relay</span>
           </div>
         </div>
         <p class="network-caption">Five tools. One source of truth.</p>
@@ -224,9 +223,42 @@
       </div>
     </section>
 
+    <section class="pseudo-commands shell section" id="get-started">
+      <div class="section-heading" style="margin-bottom: 50px;">
+        <div class="section-index">05 / How to get started</div>
+        <h2>Pseudo-commands<br>in any agent chat.</h2>
+      </div>
+      <p class="protocol-intro" style="margin-left: 0; margin-top: 0; margin-bottom: 50px;">Not built-in slash commands — agents recognize these from patched instructions:</p>
+      
+      <div class="commands-table-wrapper">
+        <table class="commands-table">
+          <thead>
+            <tr>
+              <th>Say this</th>
+              <th>Agent should</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>/relay update</code></td>
+              <td>Sync, update IR, regenerate handoff</td>
+            </tr>
+            <tr>
+              <td><code>/relay context</code></td>
+              <td>Read handoff file</td>
+            </tr>
+            <tr>
+              <td><code>/relay init</code></td>
+              <td>Install Relay if missing</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
     <section class="features shell section">
       <div class="section-heading">
-        <div class="section-index">05 / Built for teams</div>
+        <div class="section-index">06 / Built for teams</div>
         <h2>Memory that moves<br>at the speed of work.</h2>
       </div>
       <div class="feature-grid">
@@ -245,14 +277,13 @@
       <div class="shell final-cta-inner">
         <p class="eyebrow">The shared brain is ready</p>
         <h2>Your team's AI is only as smart<br>as your team's memory.</h2>
-        <a class="button button-large" href="mailto:hello@relay.dev?subject=/.relay early access">Get early access <span aria-hidden="true">↗</span></a>
-        <p class="cta-note">Free during beta <span>·</span> No credit card <span>·</span> Bring your own AI credits</p>
+        <a class="button button-large" href="http://localhost:6374/login">Try now for free <span aria-hidden="true">↗</span></a>
       </div>
     </section>
   </main>
 
   <footer class="footer shell">
-    <a class="wordmark" href="#top">/.relay</a>
+    <a class="wordmark" href="#top"><img src="logo.png" alt="" class="inline-logo" /> /.relay</a>
     <p>Shared memory for AI teams.</p>
     <p>© 2026 /.relay</p>
   </footer>
