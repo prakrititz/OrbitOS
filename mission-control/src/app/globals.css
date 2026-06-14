@@ -1,17 +1,17 @@
 :root {
-  --color-idle: #4a4a5e;
-  --color-active: #f7b91c; /* premium yellow */
-  --color-success: #00ff9d; /* developer accent */
-  --color-warning: #f59e0b;
-  --color-critical: #ef4444;
-  --color-surface-1: #1e1e1e;
-  --color-surface-2: #171717;
-  --color-surface-3: #252525;
-  --color-border: #2e2e2e;
+  --color-idle: rgba(255, 255, 255, 0.24);
+  --color-active: #ffffff;
+  --color-success: rgba(255, 255, 255, 0.82);
+  --color-warning: rgba(255, 255, 255, 0.62);
+  --color-critical: rgba(255, 255, 255, 0.42);
+  --color-surface-1: #000000;
+  --color-surface-2: #000000;
+  --color-surface-3: rgba(255, 255, 255, 0.035);
+  --color-border: rgba(255, 255, 255, 0.1);
   
-  --text-primary: #e0e0e0;
-  --text-secondary: #8a8a9e;
-  --text-muted: #5a5a72;
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.55);
+  --text-muted: rgba(255, 255, 255, 0.34);
 }
 
 * {
@@ -34,11 +34,11 @@ body {
 }
 
 .glass-panel {
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(255, 255, 255, 0.025);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--color-border);
-  border-radius: 8px;
+  border-radius: 2px;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -72,21 +72,21 @@ body {
 }
 
 @keyframes pulse-active {
-  0% { box-shadow: 0 0 0 0 rgba(247, 185, 28, 0.4); }
-  70% { box-shadow: 0 0 0 8px rgba(247, 185, 28, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(247, 185, 28, 0); }
+  0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.3); }
+  70% { box-shadow: 0 0 0 8px rgba(255, 255, 255, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
 }
 
 @keyframes pulse-warning {
-  0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
-  70% { box-shadow: 0 0 0 8px rgba(245, 158, 11, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+  0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.22); }
+  70% { box-shadow: 0 0 0 8px rgba(255, 255, 255, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
 }
 
 @keyframes pulse-critical {
-  0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
-  70% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+  0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.14); }
+  70% { box-shadow: 0 0 0 8px rgba(255, 255, 255, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
 }
 
 @keyframes progress-fill {

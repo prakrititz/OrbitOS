@@ -52,7 +52,7 @@
 }
 
 .vulnBadge {
-  background: rgba(245, 158, 11, 0.2);
+  background: rgba(255, 255, 255, 0.1);
   color: var(--color-warning);
   font-size: 10px;
   font-weight: 800;

@@ -32,7 +32,7 @@
   flex-direction: column;
   gap: 4px;
   opacity: 0; /* for animation */
-  background: #1e1e1e;
+  background: #000000;
   padding: 12px 16px;
   border-radius: 8px;
   border-left: 2px solid transparent;
@@ -41,7 +41,7 @@
 
 .item:hover {
   border-left-color: var(--border-color);
-  background: #252525;
+  background: rgba(255, 255, 255, 0.035);
 }
 
 .label {

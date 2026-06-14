@@ -64,8 +64,8 @@
 }
 
 .operator { background-color: var(--color-surface-3); color: var(--text-primary); border: 1px solid var(--color-border); }
-.memoryAvatar { background-color: rgba(99, 102, 241, 0.2); color: #818cf8; border: 1px solid rgba(99, 102, 241, 0.4); }
-.agentAvatar { background-color: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.4); }
+.memoryAvatar { background-color: rgba(255, 255, 255, 0.1); color: rgba(255, 255, 255, 0.85); border: 1px solid rgba(255, 255, 255, 0.25); }
+.agentAvatar { background-color: rgba(255, 255, 255, 0.06); color: rgba(255, 255, 255, 0.65); border: 1px solid rgba(255, 255, 255, 0.16); }
 
 .messageContent {
   display: flex;
@@ -98,7 +98,7 @@
 
 .memoryEntryBox {
   background: var(--color-surface-2);
-  border-left: 3px solid #818cf8;
+  border-left: 3px solid rgba(255, 255, 255, 0.5);
   padding: 12px;
   border-radius: 0 6px 6px 0;
   font-family: var(--font-mono);
@@ -168,8 +168,8 @@
   border: none;
 }
 
-.voteBtnYes { background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.3); }
-.voteBtnNo { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+.voteBtnYes { background: rgba(255, 255, 255, 0.1); color: rgba(255, 255, 255, 0.85); border: 1px solid rgba(255, 255, 255, 0.25); }
+.voteBtnNo { background: rgba(255, 255, 255, 0.04); color: rgba(255, 255, 255, 0.45); border: 1px solid rgba(255, 255, 255, 0.12); }
 .voteBtnEdit { background: transparent; color: var(--text-primary); border: 1px solid var(--color-border); }
 
 .inputArea {
@@ -208,7 +208,7 @@
 
 .sendBtn {
   background-color: var(--color-active);
-  color: #171717;
+  color: #000000;
   border: none;
   border-radius: 6px;
   padding: 8px 16px;

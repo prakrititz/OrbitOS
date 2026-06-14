@@ -60,7 +60,7 @@
 }
 
 .thinking .nodeCore {
-  background-color: rgba(59, 130, 246, 0.2);
+  background-color: rgba(255, 255, 255, 0.08);
   border-color: var(--color-active);
   animation: pulse-active 2s infinite;
 }

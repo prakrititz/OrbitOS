@@ -10,7 +10,7 @@
 }
 
 .agentCard {
-  background: #1e1e1e;
+  background: #000000;
   border: 1px solid var(--border-color);
   border-radius: 12px;
   padding: 16px;
@@ -35,8 +35,8 @@
 }
 
 .agentCard.active {
-  background: #252525;
-  border-color: #3d3d3d;
+  background: rgba(255, 255, 255, 0.035);
+  border-color: rgba(255, 255, 255, 0.16);
 }
 
 .agentCard.active::before {
@@ -51,7 +51,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #2d2d2d;
+  background: rgba(255, 255, 255, 0.08);
   border-radius: 50%;
   font-size: 24px;
 }

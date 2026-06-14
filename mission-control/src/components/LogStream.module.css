@@ -52,7 +52,7 @@
 }
 
 .agentBadge {
-  color: #a78bfa; /* purple for agent actions */
+  color: rgba(255, 255, 255, 0.68);
   flex-shrink: 0;
   width: 90px;
 }
@@ -62,7 +62,7 @@
   word-break: break-word;
 }
 
-.handoff .message { color: #22d3ee; } /* cyan */
+.handoff .message { color: rgba(255, 255, 255, 0.86); }
 .success .message { color: var(--color-success); }
 .warning .message { color: var(--color-warning); }
 .error .message { color: var(--color-critical); }
