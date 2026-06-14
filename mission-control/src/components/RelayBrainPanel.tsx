@@ -15,7 +15,7 @@ const SECTIONS = [
 
 export default function RelayBrainPanel() {
   const { activeWorkspace, dashboard, relayOnline, syncing, refresh } = useRelay();
-  const [open, setOpen] = useState<string>('handoff');
+  const [active, setActive] = useState<string>('handoff');
 
   if (!activeWorkspace) {
     return (
@@ -47,29 +47,28 @@ export default function RelayBrainPanel() {
         </button>
       </div>
 
-      <div className={`${styles.sections} custom-scrollbar`}>
-        {SECTIONS.map((section) => {
-          const content = section.pick(dashboard);
-          const isOpen = open === section.key;
-          return (
-            <div key={section.key} className={styles.section}>
-              <button
-                type="button"
-                className={`${styles.sectionHead} ${isOpen ? styles.sectionHeadOpen : ''}`}
-                onClick={() => setOpen(isOpen ? '' : section.key)}
-              >
-                <span>{section.label}</span>
-                <span className={styles.chevron}>{isOpen ? '▾' : '▸'}</span>
-              </button>
-              {isOpen && (
-                <pre className={`${styles.body} mono`}>
-                  {content.trim() || `No ${section.label.toLowerCase()} yet — run /relay update in an agent.`}
-                </pre>
-              )}
-            </div>
-          );
-        })}
+      <div className={`${styles.tabs} custom-scrollbar`}>
+        {SECTIONS.map((section) => (
+          <button
+            key={section.key}
+            type="button"
+            className={`${styles.tab} ${active === section.key ? styles.tabActive : ''}`}
+            onClick={() => setActive(section.key)}
+          >
+            {section.label}
+          </button>
+        ))}
       </div>
+
+      {(() => {
+        const section = SECTIONS.find((s) => s.key === active) ?? SECTIONS[0];
+        const content = section.pick(dashboard);
+        return (
+          <pre className={`${styles.body} mono custom-scrollbar`}>
+            {content.trim() || `No ${section.label.toLowerCase()} yet — run /relay update in an agent.`}
+          </pre>
+        );
+      })()}
     </div>
   );
 }

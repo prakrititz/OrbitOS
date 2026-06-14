@@ -21,40 +21,6 @@
   color: var(--text-primary);
 }
 
-.agentRow {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  padding: 12px 16px;
-  border-bottom: 1px solid var(--color-border);
-}
-
-.agentChip {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 10px;
-  border-radius: 999px;
-  border: 1px solid var(--color-border);
-  background: var(--color-surface-2);
-  color: var(--text-secondary);
-  font-size: 11px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.agentChipActive {
-  border-color: var(--color-active);
-  color: var(--text-primary);
-  background: rgba(255, 255, 255, 0.08);
-}
-
-.agentLogo {
-  width: 16px;
-  height: 16px;
-  object-fit: contain;
-}
-
 .metaRow {
   display: flex;
   align-items: center;
@@ -141,12 +107,87 @@
   white-space: pre-wrap;
 }
 
+.mention {
+  font-weight: 700;
+}
+
 .compose {
+  position: relative;
   display: flex;
   gap: 10px;
   padding: 12px 16px;
   border-top: 1px solid var(--color-border);
   background: var(--color-surface-2);
+}
+
+.mentionPopup {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 100%;
+  margin-bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.mentionItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 6px 8px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+}
+
+.mentionItem:hover,
+.mentionItemActive {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-primary);
+}
+
+.mentionLogo {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+
+.mentionLabel {
+  flex: 1;
+}
+
+.mentionStatus {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.status_connected {
+  color: #6ee7b7;
+}
+
+.status_handshaking {
+  color: #fcd34d;
+}
+
+.status_error {
+  color: #f87171;
 }
 
 .input {

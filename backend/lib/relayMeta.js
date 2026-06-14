@@ -33,10 +33,11 @@ function writeMissionMeta(workspacePath, meta) {
   const relayDir = getRelayDir(workspacePath);
   if (!fs.existsSync(relayDir)) fs.mkdirSync(relayDir, { recursive: true });
 
+  const current = readMissionMeta(workspacePath);
   const payload = {
     version: 1,
-    collaborators: Array.isArray(meta.collaborators) ? meta.collaborators : [],
-    chat: Array.isArray(meta.chat) ? meta.chat : [],
+    collaborators: Array.isArray(meta.collaborators) ? meta.collaborators : current.collaborators,
+    chat: Array.isArray(meta.chat) ? meta.chat : current.chat,
     updatedAt: new Date().toISOString(),
   };
 

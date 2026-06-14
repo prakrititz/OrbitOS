@@ -123,6 +123,7 @@ export interface MissionChatMessage {
   id: string;
   author: string;
   agent?: AgentId | null;
+  mentions?: AgentId[];
   role: 'user' | 'system';
   text: string;
   ts: string;
