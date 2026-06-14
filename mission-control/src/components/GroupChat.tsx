@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useSession } from 'next-auth/react';
-import { supabase } from '@/lib/supabaseClient';
 import { getMessages, sendMessage } from '@/app/actions';
 import styles from './GroupChat.module.css';
 
@@ -40,22 +39,14 @@ export default function GroupChat() {
       scrollToBottom();
     });
 
-    // Subscribe to real-time inserts via Supabase
-    const channel = supabase
-      .channel('realtime_chat')
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'Message', filter: `workspaceId=eq.${activeWorkspace}` }, (payload) => {
-        // We fetch the full message payload to get the user name (since the insert only has userId)
-        // For ultimate speed, we just re-fetch the message list
-        getMessages(activeWorkspace).then(data => {
-          setMessages(data);
-          scrollToBottom();
-        });
-      })
-      .subscribe();
+    // Poll for new messages (replaces Supabase realtime subscription)
+    const interval = setInterval(() => {
+      getMessages(activeWorkspace).then(data => {
+        setMessages(data);
+      });
+    }, 3000);
 
-    return () => {
-      supabase.removeChannel(channel);
-    };
+    return () => clearInterval(interval);
   }, [activeWorkspace]);
 
   useEffect(() => {
@@ -83,7 +74,7 @@ export default function GroupChat() {
 
     try {
       await sendMessage(activeWorkspace, textToSend);
-      // Supabase realtime will broadcast the official message
+      // The next poll will pick up the official message
     } catch (err) {
       console.error(err);
       // Remove temp message if failed
