@@ -13,20 +13,9 @@ const tools = [
 export default function InfrastructureBar() {
   return (
     <div className={styles.bar}>
-      <div className={styles.left}>
-        <span className={styles.label}>CONNECTED TOOLS</span>
-        <div className={styles.containerList}>
-          {tools.map(t => (
-            <div key={t.name} className={styles.containerPill}>
-              <span className={styles[t.status]}>●</span> {t.name} <span className={styles.toolUser}>{t.user}</span>
-            </div>
-          ))}
-          <button className={styles.connectBtn}>+ Connect Your Tool</button>
-        </div>
-      </div>
-      
+
       <div className={styles.metrics}>
-        <span className={styles.sysOk}>Relay Node Online</span>
+        <span className={styles.sysOk}>/.relay Node Online</span>
       </div>
     </div>
   );

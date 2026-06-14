@@ -4,10 +4,11 @@ import React, { useState } from 'react';
 import styles from './Sidebar.module.css';
 
 const teammates = [
-  { id: '1', name: 'Pony', tool: 'Claude Code', status: 'CODING', file: '/src/auth/jwt.ts', message: 'working on token refresh', dot: 'green' },
-  { id: '2', name: 'Unnath', tool: 'Copilot', status: 'REVIEWING', file: '/api/routes/users.ts', message: '', dot: 'green' },
-  { id: '3', name: 'Arjun', tool: 'Codex', status: 'IDLE', file: 'last seen 4m ago', message: '', dot: 'yellow' },
-  { id: '4', name: 'Sakshi', tool: 'OFFLINE', status: '', file: '', message: '', dot: 'grey' },
+  { id: '1', name: 'Prakrititz Borah', tool: 'Claude Code', initials: 'PB', color: '#ff5c5c', status: 'CODING', file: '/src/auth/jwt.ts', message: 'working on token refresh', dot: 'green' },
+  { id: '2', name: 'Unnath Chittimalla', tool: 'Copilot', initials: 'UC', color: '#5cff8a', status: 'REVIEWING', file: '/api/routes/users.ts', message: '', dot: 'green' },
+  { id: '3', name: 'Krishna Sai', tool: 'Codex', initials: 'KS', color: '#5c9eff', status: 'IDLE', file: 'last seen 4m ago', message: '', dot: 'yellow' },
+  { id: '4', name: 'Gathik Jindal', tool: 'Cursor', initials: 'GJ', color: '#e05cff', status: 'OFFLINE', file: '', message: '', dot: 'grey' },
+  { id: '5', name: 'Hemanth Mada', tool: 'Antigravity', initials: 'HM', color: '#ffb85c', status: 'OFFLINE', file: '', message: '', dot: 'grey' },
 ];
 
 const proposals = [
@@ -33,8 +34,26 @@ export default function Sidebar() {
     <aside className={styles.sidebar}>
       <div className={styles.sectionTitle}>AGENT INTEGRATIONS</div>
       <div className={styles.integrationsList}>
-        <button className={styles.initBtn} onClick={() => handleInit('Antigravity')}>Connect Antigravity</button>
-        <button className={styles.initBtn} onClick={() => handleInit('Codex')}>Connect Codex</button>
+        <button className={styles.initBtn} onClick={() => handleInit('Antigravity')}>
+          <img src="/logos/antigravity.png" alt="Antigravity" className={styles.btnLogo} />
+          Connect Antigravity
+        </button>
+        <button className={styles.initBtn} onClick={() => handleInit('Codex')}>
+          <img src="/logos/Codex.png" alt="Codex" className={styles.btnLogo} />
+          Connect Codex
+        </button>
+        <button className={styles.initBtn} onClick={() => handleInit('Claude Code')}>
+          <img src="/logos/Claude.png" alt="Claude Code" className={styles.btnLogo} />
+          Connect Claude Code
+        </button>
+        <button className={styles.initBtn} onClick={() => handleInit('Cursor')}>
+          <img src="/logos/cursor.png" alt="Cursor" className={styles.btnLogo} />
+          Connect Cursor
+        </button>
+        <button className={styles.initBtn} onClick={() => handleInit('Copilot')}>
+          <img src="/logos/github-copilot.png" alt="Copilot" className={styles.btnLogo} />
+          Connect Copilot
+        </button>
         {initCode && (
           <div className={styles.initHint}>
             Copied: <code>{initCode.code}</code><br/>
@@ -42,6 +61,8 @@ export default function Sidebar() {
           </div>
         )}
       </div>
+
+
 
       <div className={styles.spacerSmall}></div>
 
@@ -51,6 +72,7 @@ export default function Sidebar() {
         {teammates.map(tm => (
           <div key={tm.id} className={styles.teammateCard}>
             <div className={styles.tmHeader}>
+              <div className={styles.profileIcon} style={{backgroundColor: tm.color}}>{tm.initials}</div>
               <span className={`${styles.statusDot} ${styles[tm.dot]}`}></span>
               <span className={styles.tmName}>{tm.name}</span>
             </div>

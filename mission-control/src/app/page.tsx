@@ -4,7 +4,7 @@ import Sidebar from '@/components/Sidebar';
 import GroupChat from '@/components/GroupChat';
 import ContextMemory from '@/components/ContextMemory';
 import TaskQueue from '@/components/TaskQueue';
-import InfrastructureBar from '@/components/InfrastructureBar';
+
 import WorkspaceRail from '@/components/WorkspaceRail';
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
@@ -41,7 +41,6 @@ export default async function Home() {
           </div>
         </main>
 
-        <InfrastructureBar />
       </div>
     </div>
   );

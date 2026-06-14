@@ -9,7 +9,7 @@ export default function Login() {
     <div className={styles.container}>
       <div className={`glass-panel ${styles.loginCard}`}>
         <div className={styles.header}>
-          <h1 className={styles.logo}>RELAY</h1>
+          <h1 className={styles.logo}>/.relay</h1>
         </div>
 
         <button 

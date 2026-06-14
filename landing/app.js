@@ -17,21 +17,21 @@ function updateNetworkConnectors() {
 
   if (!network || !svg || !brain) return;
 
-  const networkRect = network.getBoundingClientRect();
+  const svgRect = svg.getBoundingClientRect();
   const brainRect = brain.getBoundingClientRect();
   const target = {
-    x: brainRect.left + brainRect.width / 2 - networkRect.left,
-    y: brainRect.top + brainRect.height / 2 - networkRect.top
+    x: brainRect.left + brainRect.width / 2 - svgRect.left,
+    y: brainRect.top + brainRect.height / 2 - svgRect.top
   };
 
-  svg.setAttribute("viewBox", `0 0 ${networkRect.width} ${networkRect.height}`);
+  svg.setAttribute("viewBox", `0 0 ${svgRect.width} ${svgRect.height}`);
 
   network.querySelectorAll("[data-tool]").forEach((node) => {
     const name = node.dataset.tool;
     const iconRect = node.querySelector(".tool-icon").getBoundingClientRect();
     const start = {
-      x: iconRect.left + iconRect.width / 2 - networkRect.left,
-      y: iconRect.top + iconRect.height / 2 - networkRect.top
+      x: iconRect.left + iconRect.width / 2 - svgRect.left,
+      y: iconRect.top + iconRect.height / 2 - svgRect.top
     };
     const path = svg.querySelector(`[data-connector="${name}"]`);
     const endpoint = svg.querySelector(`[data-endpoint="${name}"]`);

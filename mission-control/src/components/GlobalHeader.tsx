@@ -7,7 +7,7 @@ export default function GlobalHeader() {
   return (
     <header className={styles.header}>
       <div className={styles.left}>
-        <div className={styles.logo}>RELAY</div>
+        <div className={styles.logo}>/.relay</div>
         <div className={styles.projectDropdown}>
           GoalGuard <span className={styles.arrow}>▼</span>
         </div>
