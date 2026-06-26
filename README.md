@@ -33,11 +33,11 @@
 
 ---
 
-## 🤔 The problem
+## The problem
 
 You brief **Cursor** on Monday. Wednesday you switch to **Claude Code** — and start from zero. Every agent keeps its own little memory file (`CLAUDE.md`, `.cursorrules`, `copilot-instructions.md`, …), none of them talk to each other, and *you* become the human clipboard carrying context between tools.
 
-## ✨ The fix
+## The fix
 
 Relay keeps **one shared `.relay/` brain** that every agent reads and writes — and patches each agent's instruction file to point at it automatically.
 
@@ -50,7 +50,7 @@ Relay keeps **one shared `.relay/` brain** that every agent reads and writes —
 
 ---
 
-## 🚀 Quick start
+## Quick start
 
 ```bash
 cd your-project
@@ -62,7 +62,7 @@ relay watch .       # background sync (keep running)
 Work in **any** agent. Stop hooks (or `/relay update`) refresh the IR markdown. Switch agents → `/relay context` or just read `.relay/relay_context.md`.
 
 <details>
-<summary><strong>📦 Install options</strong></summary>
+<summary><strong>Install options</strong></summary>
 
 <br/>
 
@@ -78,7 +78,7 @@ Requires **Node.js 18+**. No database. First `relay serve` installs Mission Cont
 
 ---
 
-## 🧠 How it works
+## How it works
 
 ```text
   Cursor ──┐
@@ -91,16 +91,16 @@ Requires **Node.js 18+**. No database. First `relay serve` installs Mission Cont
 
 | Layer | Who runs it | Output |
 |-------|-------------|--------|
-| **🔄 Sync** | `relay watch`, stop hook, `relay sync` | `memory.json` + timeline |
-| **📝 Compile** | same | `compile_brief.md` |
-| **🧩 IR update** | **you / the session agent** | `project.md`, `decisions.md`, … |
-| **🤝 Handoff** | `relay context` | `relay_context.md` |
+| **Sync** | `relay watch`, stop hook, `relay sync` | `memory.json` + timeline |
+| **Compile** | same | `compile_brief.md` |
+| **IR update** | **you / the session agent** | `project.md`, `decisions.md`, … |
+| **Handoff** | `relay context` | `relay_context.md` |
 
 > `relay watch` = sync + compile only · `relay refresh` = sync + compile + context
 
 ---
 
-## 📂 What `relay init` creates
+## What `relay init` creates
 
 ```text
 your-project/
@@ -122,7 +122,7 @@ Registry (all projects): `~/.relay-os/projects.json`
 
 ---
 
-## ⌨️ Commands
+## Commands
 
 | Command | Description |
 |---------|-------------|
@@ -149,20 +149,20 @@ Registry (all projects): `~/.relay-os/projects.json`
 
 ---
 
-## 🎛️ Mission Control
+## Mission Control
 
 Started by `relay serve` — runs locally, no login.
 
 | | URL |
 |---|-----|
-| 🖥️ Dashboard | http://localhost:6374 |
-| 🔌 API | http://localhost:3001/api/health |
+| Dashboard | http://localhost:6374 |
+| API | http://localhost:3001/api/health |
 
 Activity timeline across all agents · live IR markdown · per-project API keys.
 
 ---
 
-## 🔧 MCP (optional)
+## MCP (optional)
 
 Give agents **direct tool access** to `.relay/` — list files, read/write IR markdown, sync, fetch handoff.
 
@@ -374,7 +374,7 @@ With `relay serve` + `relay watch .` running, Mission Control shows **all three 
 
 ---
 
-## 📦 Dependencies
+## Dependencies
 
 | | |
 |---|---|
@@ -414,7 +414,7 @@ Disable: `.relay/config.json` → `"autoAgentUpdate": false`
 
 <div align="center">
 
-**🛰️ Git tracks code. Relay tracks what your agents know about the project.**
+**Git tracks code. Relay tracks what your agents know about the project.**
 
 <sub>MIT licensed · Built for teams that switch tools mid-flight.</sub>
 
