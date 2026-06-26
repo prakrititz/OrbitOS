@@ -1,6 +1,6 @@
-# Contributing to OrbitOS
+# Contributing to relay
 
-Thanks for your interest in contributing to OrbitOS! This project is meant to help agents share project intelligence across Cursor, Claude, Copilot, Codex, Antigravity, and other workflows.
+Thanks for your interest in contributing to relay! This project is meant to help agents share project intelligence across Cursor, Claude, Copilot, Codex, Antigravity, and other workflows.
 
 ## How to contribute
 
@@ -22,7 +22,7 @@ Thanks for your interest in contributing to OrbitOS! This project is meant to he
 
 ## Testing your changes
 
-OrbitOS is a Node.js project targeting Node 18+. Before opening a PR, please verify your work locally.
+relay is a Node.js project targeting Node 18+. Before opening a PR, please verify your work locally.
 
 - Install dependencies if needed:
   ```bash
@@ -58,4 +58,4 @@ If you find a bug or have a feature request, open an issue describing:
 
 ## Thank you
 
-Your contributions help make OrbitOS better for everyone. If you have any questions before submitting, feel free to open an issue first.
+Your contributions help make relay better for everyone. If you have any questions before submitting, feel free to open an issue first.
