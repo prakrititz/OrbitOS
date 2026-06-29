@@ -71,7 +71,7 @@ function installCursorHooks(workspacePath) {
     entry => !String(entry.command || '').includes('relay-')
   );
   base.hooks.stop.push({
-    command: '.relay/hooks/relay-cursor-stop.js',
+    command: "node \".relay/hooks/relay-cursor-stop.js\"",
     loop_limit: 1,
   });
   base.version = base.version || 1;

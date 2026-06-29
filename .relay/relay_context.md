@@ -1,5 +1,5 @@
 # RELAY_CONTEXT
-> Auto-generated 2026-06-14T20:53:05.154Z | workspace `C:\Users\unnat\Documents\GitHub\OrbitOS` | last sync 2026-06-14T16:41:47.468Z
+> Auto-generated 2026-06-29T19:41:30.906Z | workspace `C:\Users\unnat\Documents\GitHub\OrbitOS` | last sync 2026-06-29T19:40:56.533Z
 **Do not paste raw transcripts.** This file is the handoff bundle for new agent sessions.
 ---
 ## PROJECT SUMMARY
@@ -23,6 +23,7 @@
 - `relay init` starts API + UI in background; `relay serve` foreground
 - Mission Control shows IR (handoff, tasks, decisions, failures), collaborators, agent routing chat
 - Publish to npm; install via `npm install relay-os` then `relay init`
+- **Unify all coding agents** — one canonical timeline/event schema; agent-agnostic code-edit capture (planned `.relay/changes/` snapshot ledger)
 ## CURRENT TASKS
 - [x] Audit existing codebase to find insertion points for an agentic layer
 - [x] Define winning hackathon strategy (autonomous-orchestration reframe)
@@ -32,14 +33,16 @@
 - [x] User ran `npm login` (account: jester1177)
 - [x] npm publish `relay-os@0.1.0` — package is live on the public npm registry
 - [x] Add npm install instructions (`npm install -g relay-os`, `relay init/sync/context`) + link to npmjs.com/package/relay-os to `landing/index.html` get-started section
-- [ ] Build Conductor vertical slice (reuses existing spawn + callLlm + timeline):
-- [ ] Add `lib/relayCollision.js` (groupBy(path) over `memory.timeline`)
-- [ ] Add `POST /api/orchestrate` + MCP tools (`relay_dispatch`, `relay_conflicts`)
-- [ ] Cockpit panel in `mission-control/` (DAG + live status + collision alerts)
+- [x] Fix Cursor stop hook on Windows — `installCursorHooks` uses `node ".relay/hooks/relay-cursor-stop.js"` (bare `.js` opened in editor)
+- [ ] Agent unification: canonical `code_edit` schema + shared history enrichment (Antigravity gap first)
+- [ ] Wire `compile-ir` + `relay context` into stop hook so IR updates don't depend on Agent mode
+- [ ] Relay-owned file snapshot ledger (`.relay/changes/`) for agent-agnostic before/after diffs
 ## OPEN DECISIONS
 - [ ] Weekend hero feature: full Conductor loop (think+decide+act+verify) vs collision detection first
 - [ ] Live demo dispatch: rely on real Claude/Codex CLI vs deterministic replay/mock
 - [ ] Whether to auto-open browser on `relay init` (currently prints URLs only)
+- [ ] Stop hook pipeline: auto-run `compile-ir` + `context` vs keep optional agent follow-up for semantic IR merge
+- [ ] Code-edit unification: relay-owned snapshot store vs scavenging per-agent local history
 ## CONNECTED AGENTS
 - **Cursor** | 0 events | connected 2026-06-14T15:39:23.769Z
 - **Claude Code** | 0 events | connected 2026-06-14T15:39:23.813Z
@@ -47,9 +50,9 @@
 - **Codex** | 0 events | connected 2026-06-14T15:39:38.507Z
 - **Antigravity** | 0 events | connected 2026-06-14T15:39:38.846Z
 ## LAST CHECKPOINT
-- **code_edit** via Cursor at 2026-06-14T16:42:06.344Z
-- File: `README.md`
-- Edited README.md
+- **code_edit** via Cursor at 2026-06-29T19:23:20.449Z
+- File: `relayStore.js`
+- undoRedo.source
 ## RELEVANT EVENTS
 ### [artifact] Antigravity task.md | 2026-06-14T05:37:51.864Z
 Artifact updated: task.md
@@ -57,46 +60,45 @@ Artifact updated: task.md
 Artifact updated: scratchpad_au553f9c.md
 ### [artifact] Antigravity walkthrough.md | 2026-06-14T05:40:02.069Z
 Artifact updated: walkthrough.md
-### [Cursor] user | 2026-06-14T15:39:00.967Z
-ok we missed out on showing internal relay files like current tasks, decision , failures, handoff in the serve ui and also relay init doesnt launch the ui automatically in the start, i have to do relay serve seperately, so make it launch the ui as a backgroudn process with init or serve. add a collaborators section fo…
-### [Cursor] user | 2026-06-14T15:39:18.967Z
-/relay update
-### [Cursor] user | 2026-06-14T15:39:25.967Z
-Briefly inform the user about the task result and perform any follow-up actions (if needed). If there's no follow-ups needed, don't explicitly say that.
-### [Cursor] user | 2026-06-14T15:39:27.967Z
-Briefly inform the user about the task result and perform any follow-up actions (if needed). If there's no follow-ups needed, don't explicitly say that.
 ### [Cursor] user | 2026-06-14T15:39:30.967Z
 Briefly inform the user about the task result and perform any follow-up actions (if needed). If there's no follow-ups needed, don't explicitly say that.
-### [Cursor] user | 2026-06-14T16:41:46.344Z
+### [Codex] user | 2026-06-14T16:49:50.083Z
+hey what was the last change made and which agent did it?
+### [Codex] user | 2026-06-14T16:50:07.798Z
+/relay hey what was the last change made and which agent did it?
+### [Codex] user | 2026-06-14T16:50:25.290Z
+use the relay skill and check from memory
+### [Cursor] user | 2026-06-14T17:05:17.700Z
 i want the agents to use the npm version of this like relay init relay sync, etc and not npx relay-os so on
-### [Cursor] assistant | 2026-06-14T16:41:55.344Z
-Updating installed agent files and skill copies.
+### [Cursor] user | 2026-06-14T17:05:42.700Z
+problem is that in the ui only cursor edits are shown in code edits section!
+### [Cursor] assistant | 2026-06-14T17:05:43.700Z
+Investigating how Mission Control loads and displays code edits across agents — likely a sync or filtering issue limiting the view to Cursor.
 
 [REDACTED]
-### [Cursor] assistant | 2026-06-14T16:42:00.344Z
-Updating the README agent table and regenerating generated Relay files.
+### [Cursor] assistant | 2026-06-14T17:05:51.700Z
+The Code edits tab prefers `dashboard.recentEdits` (last 20 globally), so heavy Cursor activity hides other agents. Checking other UI surfaces for the same pattern.
 
 [REDACTED]
-### [Cursor] assistant | 2026-06-14T16:42:05.344Z
-Updating README and QUICKSTART examples for consistency.
+### [Cursor] assistant | 2026-06-14T17:05:56.700Z
+Identifying the issue: the Code edits tab uses `dashboard.recentEdits` (last 20 globally), which recent Cursor activity fills. Fixing the UI to use the full timeline and improving backend edit aggregation.
 
 [REDACTED]
-### [edit] Cursor edited README.md | 2026-06-14T16:42:05.344Z
-Edited README.md
-### [edit] Cursor edited QUICKSTART.md | 2026-06-14T16:42:05.344Z
-Edited QUICKSTART.md
-### [edit] Cursor edited QUICKSTART.md | 2026-06-14T16:42:05.344Z
-Edited QUICKSTART.md
-### [edit] Cursor edited project.md | 2026-06-14T16:42:05.344Z
-Edited project.md
-### [edit] Cursor edited README.md | 2026-06-14T16:42:06.344Z
-Edited README.md
-### [Cursor] assistant | 2026-06-14T16:42:09.344Z
-All agent-facing instructions now use the `relay` npm binary (`relay init`, `relay sync`, `relay context .`, etc.) instead of `npx relay-os`.
+### [edit] Cursor edited ProjectDashboard.tsx | 2026-06-14T17:05:56.700Z
+Edited ProjectDashboard.tsx
+### [edit] Cursor edited ProjectDashboard.tsx | 2026-06-14T17:05:56.700Z
+Edited ProjectDashboard.tsx
+### [edit] Cursor edited ProjectDashboard.tsx | 2026-06-14T17:05:56.700Z
+Edited ProjectDashboard.tsx
+### [edit] Cursor edited app.js | 2026-06-14T17:05:56.700Z
+Edited app.js
+### [Cursor] assistant | 2026-06-14T17:05:59.700Z
+The Code edits tab was showing only Cursor edits because of how the data was selected, not because other agents weren't synced.
 
-### What changed
+### Root cause
 
-**Source templates** (used by `relay init` / `relay install` on any project):
-- `backend/lib/relayInstall.js` — bootstrap, patched instruction blocks, Cursor …
+The **Code edits** tab preferred `dashboard.recentEdits`, which was built as the **last 20 edits globally** by timestamp. After a Cursor session, those 20 were all Cursor — e…
+### [edit] Cursor edited relayStore.js | 2026-06-29T19:23:20.449Z
+undoRedo.source
 ---
 _Source: `.relay/memory.json` + IR markdown. Regenerate: `relay context .` after `relay compile`._

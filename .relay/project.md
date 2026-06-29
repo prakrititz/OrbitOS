@@ -18,3 +18,4 @@
 - `relay init` starts API + UI in background; `relay serve` foreground
 - Mission Control shows IR (handoff, tasks, decisions, failures), collaborators, agent routing chat
 - Publish to npm; install via `npm install relay-os` then `relay init`
+- **Unify all coding agents** — one canonical timeline/event schema; agent-agnostic code-edit capture (planned `.relay/changes/` snapshot ledger)

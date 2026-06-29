@@ -28,10 +28,20 @@ stored in `.relay/memory.json` → `{ agents: { [name]: { events[] } }, timeline
 - `lib/relayCollision.js` — pure fn over `memory.timeline`: groupBy(path) + overlapping windows + diff-hunk overlap
 - Surfaces: CLI `relay conduct`, `POST /api/orchestrate`, MCP `relay_dispatch`/`relay_conflicts`, cockpit panel
 
+## Hooks (`backend/lib/relayHooks.js`, `backend/hooks/relay-hook-lib.js`)
+
+- Per-agent stop hooks run `relay sync` + `relay compile` automatically
+- Cursor install must use `node ".relay/hooks/relay-cursor-stop.js"` (see `HOOK_CMD.cursor`)
+- Follow-up IR merge is agent-driven today; target: hook also runs `compile-ir` + `context` without Agent mode
+
+## Planned change capture
+
+- `.relay/changes/` — relay-owned before/after snapshots (git-lite), not dependent on agent transcripts or hook follow-up
+
 ## Boundaries
 
 - Sync/compile: Relay CLI (`watch`, stop hooks)
-- IR markdown updates: session agent (or `/relay update`)
+- IR markdown updates: session agent (or `/relay update`); moving toward `compile-ir` in hook
 - Handoff: `relay context` → `relay_context.md`
 - Storage is files only (`.relay/`); pluggable toward Postgres/object store for teams
 - Local-first by design (privacy); event-sourced core gives audit + replay for free

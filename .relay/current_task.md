@@ -11,8 +11,13 @@
 - [x] User ran `npm login` (account: jester1177)
 - [x] npm publish `relay-os@0.1.0` — package is live on the public npm registry
 - [x] Add npm install instructions (`npm install -g relay-os`, `relay init/sync/context`) + link to npmjs.com/package/relay-os to `landing/index.html` get-started section
+- [x] Fix Cursor stop hook on Windows — `installCursorHooks` uses `node ".relay/hooks/relay-cursor-stop.js"` (bare `.js` opened in editor)
+- [ ] Agent unification: canonical `code_edit` schema + shared history enrichment (Antigravity gap first)
+- [ ] Wire `compile-ir` + `relay context` into stop hook so IR updates don't depend on Agent mode
 
 ## Next
+- [ ] Relay-owned file snapshot ledger (`.relay/changes/`) for agent-agnostic before/after diffs
+- [ ] Extend `relay watch` to watch workspace files, not only transcripts
 - [ ] Build Conductor vertical slice (reuses existing spawn + callLlm + timeline):
       `relay conduct "<goal>"` → decompose → route → dispatch → monitor → verify
 - [ ] Add `lib/relayCollision.js` (groupBy(path) over `memory.timeline`)

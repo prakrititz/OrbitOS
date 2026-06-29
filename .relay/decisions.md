@@ -4,9 +4,13 @@
 - [ ] Weekend hero feature: full Conductor loop (think+decide+act+verify) vs collision detection first
 - [ ] Live demo dispatch: rely on real Claude/Codex CLI vs deterministic replay/mock
 - [ ] Whether to auto-open browser on `relay init` (currently prints URLs only)
+- [ ] Stop hook pipeline: auto-run `compile-ir` + `context` vs keep optional agent follow-up for semantic IR merge
+- [ ] Code-edit unification: relay-owned snapshot store vs scavenging per-agent local history
 
 ## Resolved
 
+- 2026-06-30 — Cursor `installCursorHooks` must invoke `node ".relay/hooks/relay-cursor-stop.js"` — bare `.js` path opens in editor on Windows
+- 2026-06-30 — Force Agent/Edit mode via hooks **on hold** — Cursor hook API has no mode switch; use agent-free `compile-ir` + `context` in hook instead
 - 2026-06-15 — `relay-os@0.1.0` published successfully to the public npm registry; landing page get-started section (`landing/index.html`) now documents `npm install -g relay-os` + `relay init/sync/context` and links to npmjs.com/package/relay-os
 - 2026-06-14 — Agent-facing instructions (CLAUDE.md, AGENTS.md, .cursorrules, copilot-instructions.md, relay.mdc, skills, hook libs, README/QUICKSTART) now tell agents to use the local `relay` npm binary (`relay init`, `relay sync`, `relay context .`) instead of `npx relay-os`; `npx relay` kept only as fallback if `relay` isn't on PATH
 - 2026-06-15 — Keep npm package name as `relay-os` (considered renaming to `relay-brain`, available but decided against — no rename)
